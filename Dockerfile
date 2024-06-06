@@ -1,6 +1,6 @@
 FROM snowdreamtech/build-essential:3.20.0 AS builder
 
-ARG OpenSSH_VERSION 9.7p1
+ENV OpenSSH_VERSION 9.7p1
 
 RUN mkdir /workspace
 WORKDIR /workspace
@@ -20,7 +20,7 @@ LABEL maintainer="snowdream <sn0wdr1am@qq.com>"
 
 ENV SSH_ROOT_PASSWORD=
 
-RUN apk add --no-cache fastfetch dropbear \
+RUN apk add --no-cache fastfetch dropbear dropbear-convert dropbear-dbclient dropbear-doc dropbear-scp dropbear-ssh \
 && mkdir -p /usr/libexec 
 
 COPY --from=builder /workspace/sftp-server /usr/libexec/

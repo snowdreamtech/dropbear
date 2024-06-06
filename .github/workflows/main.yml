@@ -52,10 +52,10 @@ jobs:
             platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/riscv64,linux/s390x
             push: true
             tags: |
-              snowdreamtech/openssh:latest
-              snowdreamtech/openssh:9.7_p1-r3
-              snowdreamtech/openssh:9
-              ghcr.io/snowdreamtech/openssh:latest
-              ghcr.io/snowdreamtech/openssh:9.7_p1-r3
-              ghcr.io/snowdreamtech/openssh:9
+              snowdreamtech/dropbear:latest
+              snowdreamtech/dropbear:2024.85-r0
+              snowdreamtech/dropbear:2024
+              ghcr.io/snowdreamtech/dropbear:latest
+              ghcr.io/snowdreamtech/dropbear:2024.85-r0
+              ghcr.io/snowdreamtech/dropbear:2024
              

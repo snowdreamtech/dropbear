@@ -1,6 +1,6 @@
 FROM snowdreamtech/build-essential:3.20.0 AS builder
 
-ENV OpenSSH_VERSION 9.7p1
+ENV OpenSSH_VERSION=9.7p1
 
 RUN mkdir /workspace
 WORKDIR /workspace

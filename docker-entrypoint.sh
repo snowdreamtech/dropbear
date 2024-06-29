@@ -25,5 +25,5 @@ fi
 # start dropbear
 /usr/sbin/dropbear -F
 
-# wait
-wait
+# exec commands
+exec "$@"

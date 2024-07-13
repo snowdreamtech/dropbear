@@ -21,7 +21,7 @@ LABEL maintainer="snowdream <sn0wdr1am@qq.com>"
 
 ENV SSH_ROOT_PASSWORD=
 
-RUN apk add --no-cache fastfetch dropbear dropbear-convert dropbear-dbclient dropbear-doc dropbear-scp dropbear-ssh \
+RUN apk add --no-cache fastfetch dropbear=2024.85-r0 \
     && mkdir -p /usr/libexec 
 
 COPY --from=builder /workspace/sftp* /usr/libexec/

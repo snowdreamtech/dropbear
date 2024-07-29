@@ -1,4 +1,4 @@
-FROM snowdreamtech/build-essential:3.20.0 AS builder
+FROM snowdreamtech/build-essential:3.20.2 AS builder
 
 ENV OpenSSH_VERSION=9.7p1
 
@@ -15,7 +15,7 @@ RUN wget https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-$OpenSSH_V
 
 
 
-FROM snowdreamtech/alpine:3.20.0
+FROM snowdreamtech/alpine:3.20.2
 
 LABEL maintainer="snowdream <sn0wdr1am@qq.com>"
 

@@ -1,19 +1,15 @@
 FROM snowdreamtech/build-essential:3.20.2 AS builder
 
-ENV OpenSSH_VERSION=9.8p1
+ENV OpenSSH_VERSION=9.8_p1-r1
 
 RUN mkdir /workspace
 WORKDIR /workspace
-RUN wget https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-$OpenSSH_VERSION.tar.gz  \ 
-    && tar zxvf openssh-$OpenSSH_VERSION.tar.gz  \ 
-    && cd openssh-$OpenSSH_VERSION  \ 
-    && ./configure  \ 
-    && make sftp-server \
-    && make sftp \
-    && cp sftp-server sftp ../
+
+RUN apk add --no-cache openssh@main=$OpenSSH_VERSION \
+    && cp $(which sftp-server) $(which sftp) /workspace/
 
 
-
+    
 
 FROM snowdreamtech/alpine:3.20.2
 

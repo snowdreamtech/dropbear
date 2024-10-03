@@ -1,6 +1,7 @@
 #!/bin/sh
 set -e
 
+
 # ssh-keygen -A
 if [ ! -f "/etc/dropbear/dropbear_rsa_host_key" ]; then
   dropbearkey -t ed25519 -f /etc/dropbear/dropbear_ed25519_host_key >/dev/null 2>&1
@@ -23,7 +24,17 @@ if [ ! -d "$HOME/.ssh" ]; then
 fi
 
 # start dropbear
-/usr/sbin/dropbear -F
+/usr/sbin/dropbear
 
 # exec commands
-exec "$@"
+if [ -n "$*" ]; then
+    sh -c "$*"
+fi
+
+# keep the docker container running
+# https://github.com/docker/compose/issues/1926#issuecomment-422351028
+if [ "${KEEPALIVE}" -eq 1 ]; then
+    trap : TERM INT
+    tail -f /dev/null & wait
+    # sleep infinity & wait
+fi

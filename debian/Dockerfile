@@ -1,4 +1,4 @@
-FROM snowdreamtech/alpine:3.20.3 AS builder
+FROM snowdreamtech/debian:12.7.0 AS builder
 
 ENV OpenSSH_VERSION=1:9.9p1-1
 

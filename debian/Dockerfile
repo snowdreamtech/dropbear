@@ -1,23 +1,23 @@
 FROM snowdreamtech/debian:12.7.0 AS builder
 
-ENV OpenSSH_VERSION=1:9.9p1-1
+ENV OPENSSH_VERSION=1:9.9p1-1
 
 RUN mkdir /workspace
 WORKDIR /workspace
 
 RUN set -eux \
-&& apt-get -qqy update  \
-&& apt-get -qqy install --no-install-recommends \ 
--t trixie \
-openssh-server=${OPENSSH_VERSION} \ 
-openssh-sftp-server=${OPENSSH_VERSION} \ 
-openssh-client=${OPENSSH_VERSION} \
-&& cp $(which sftp-server) $(which sftp) /workspace/ \
-&& apt-get -qqy --purge autoremove \
-&& apt-get -qqy clean \
-&& rm -rf /var/lib/apt/lists/* \
-&& rm -rf /tmp/* \
-&& rm -rf /var/tmp/*
+    && apt-get -qqy update  \
+    && apt-get -qqy install --no-install-recommends \ 
+    -t trixie \
+    openssh-server=${OPENSSH_VERSION} \ 
+    openssh-sftp-server=${OPENSSH_VERSION} \ 
+    openssh-client=${OPENSSH_VERSION} \
+    && cp $(which sftp-server) $(which sftp) /workspace/ \
+    && apt-get -qqy --purge autoremove \
+    && apt-get -qqy clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/* \
+    && rm -rf /var/tmp/*
 
 
 
@@ -37,7 +37,7 @@ LABEL org.opencontainers.image.authors="Snowdream Tech" \
 
 # keep the docker container running
 ENV KEEPALIVE=1 \
-SSH_ROOT_PASSWORD=
+    SSH_ROOT_PASSWORD=
 
 RUN set -eux \
     && apt-get -qqy update  \

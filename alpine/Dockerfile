@@ -1,11 +1,11 @@
 FROM snowdreamtech/alpine:3.20.3 AS builder
 
-ENV OpenSSH_VERSION=9.9_p1-r1
+ENV OPENSSH_VERSION=9.9_p1-r1
 
 RUN mkdir /workspace
 WORKDIR /workspace
 
-RUN apk add --no-cache openssh@main=$OpenSSH_VERSION \
+RUN apk add --no-cache openssh@main=$OPENSSH_VERSION \
     && cp $(which sftp-server) $(which sftp) /workspace/
 
 

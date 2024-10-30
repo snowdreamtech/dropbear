@@ -44,7 +44,7 @@ RUN set -eux \
     && apt-get -qqy install --no-install-recommends \ 
     -t trixie \
     fastfetch \
-    dropbear=2024.85-3 \
+    dropbear=2024.86-1 \
     && mkdir -p /usr/libexec \
     && apt-get -qqy --purge autoremove \
     && apt-get -qqy clean \

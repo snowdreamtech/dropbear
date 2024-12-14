@@ -21,7 +21,7 @@ LABEL org.opencontainers.image.authors="Snowdream Tech" \
     org.opencontainers.image.licenses="MIT" \
     org.opencontainers.image.source="https://github.com/snowdreamtech/dropbear" \
     org.opencontainers.image.vendor="Snowdream Tech" \
-    org.opencontainers.image.version="2024.85" \
+    org.opencontainers.image.version="2024.86" \
     org.opencontainers.image.url="https://github.com/snowdreamtech/dropbear"
 
 # keep the docker container running
@@ -30,7 +30,7 @@ ENV KEEPALIVE=1 \
 
 RUN apk add --no-cache \
     fastfetch \
-    dropbear=2024.85-r0 \
+    dropbear=2024.86-r0 \
     && mkdir -p /usr/libexec
 
 COPY --from=builder /workspace/sftp* /usr/libexec/

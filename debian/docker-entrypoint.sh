@@ -9,8 +9,8 @@ if [ ! -f "/etc/dropbear/dropbear_rsa_host_key" ]; then
   dropbearkey -t ecdsa -s 521 -f /etc/dropbear/dropbear_ecdsa_host_key >/dev/null 2>&1
 fi
 
-# fastfetch from https://github.com/fastfetch-cli/fastfetch
-fastfetch --pipe false >/etc/motd 2>&1
+# # fastfetch from https://github.com/fastfetch-cli/fastfetch
+# fastfetch --pipe false >/etc/motd 2>&1
 
 # change the password for root
 echo "root:$SSH_ROOT_PASSWORD" | chpasswd >/dev/null 2>&1

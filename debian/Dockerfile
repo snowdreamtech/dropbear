@@ -1,6 +1,6 @@
 FROM snowdreamtech/debian:12.8.0 AS builder
 
-ENV OPENSSH_VERSION=1:9.9p1-3
+ENV OPENSSH_VERSION=1:9.2p1-2+deb12u3
 
 RUN mkdir /workspace
 WORKDIR /workspace
@@ -8,7 +8,6 @@ WORKDIR /workspace
 RUN set -eux \
     && apt-get -qqy update  \
     && apt-get -qqy install --no-install-recommends \ 
-    -t trixie \
     openssh-server=${OPENSSH_VERSION} \ 
     openssh-sftp-server=${OPENSSH_VERSION} \ 
     openssh-client=${OPENSSH_VERSION} \
@@ -32,7 +31,7 @@ LABEL org.opencontainers.image.authors="Snowdream Tech" \
     org.opencontainers.image.licenses="MIT" \
     org.opencontainers.image.source="https://github.com/snowdreamtech/dropbear" \
     org.opencontainers.image.vendor="Snowdream Tech" \
-    org.opencontainers.image.version="12.7" \
+    org.opencontainers.image.version="2022.83" \
     org.opencontainers.image.url="https://github.com/snowdreamtech/dropbear"
 
 # keep the docker container running
@@ -42,9 +41,8 @@ ENV KEEPALIVE=1 \
 RUN set -eux \
     && apt-get -qqy update  \
     && apt-get -qqy install --no-install-recommends \ 
-    -t trixie \
-    fastfetch \
-    dropbear=2024.86-1 \
+    # fastfetch \
+    dropbear=2022.83-1+deb12u2 \
     && mkdir -p /usr/libexec \
     && apt-get -qqy --purge autoremove \
     && apt-get -qqy clean \

@@ -26,12 +26,17 @@ LABEL org.opencontainers.image.authors="Snowdream Tech" \
 
 # keep the docker container running
 ENV KEEPALIVE=1 \
+    DROPBEAR_VERSION=2024.86-r0 \
     SSH_ROOT_PASSWORD=
 
 RUN apk add --no-cache \
     fastfetch \
     xauth \
-    dropbear=2024.86-r0 \
+    dropbear=${DROPBEAR_VERSION} \
+    dropbear-convert=${DROPBEAR_VERSION} \
+    dropbear-dbclient=${DROPBEAR_VERSION} \
+    dropbear-scp=${DROPBEAR_VERSION} \
+    dropbear-ssh=${DROPBEAR_VERSION} \
     && mkdir -p /usr/libexec
 
 COPY --from=builder /workspace/sftp* /usr/libexec/

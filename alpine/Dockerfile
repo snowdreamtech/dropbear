@@ -30,6 +30,7 @@ ENV KEEPALIVE=1 \
 
 RUN apk add --no-cache \
     fastfetch \
+    xauth \
     dropbear=2024.86-r0 \
     && mkdir -p /usr/libexec
 

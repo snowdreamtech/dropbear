@@ -42,6 +42,7 @@ RUN set -eux \
     && apt-get -qqy update  \
     && apt-get -qqy install --no-install-recommends \ 
     # fastfetch \
+    xauth \
     dropbear=2022.83-1+deb12u2 \
     && mkdir -p /usr/libexec \
     && apt-get -qqy --purge autoremove \

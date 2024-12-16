@@ -46,6 +46,8 @@ RUN mkdir -p /usr/lib/ssh/ \
     && echo -e '#!/bin/sh\n/usr/libexec/sftp -S /usr/bin/dbclient -s /usr/libexec/sftp-server "$@"' > /usr/local/bin/sftp \
     && chmod +x /usr/local/bin/sftp
 
+COPY motd.sh /etc/periodic/15min/
+
 EXPOSE 22
 
 COPY docker-entrypoint.sh /usr/local/bin/

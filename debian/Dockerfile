@@ -45,6 +45,9 @@ RUN set -eux \
     xauth \
     dropbear=2022.83-1+deb12u2 \
     && mkdir -p /usr/libexec \
+    # && echo '#!/bin/sh' | tee /etc/update-motd.d/20-fastfetch \
+    # && echo 'fastfetch --pipe false' | tee -a /etc/update-motd.d/20-fastfetch \
+    # && chmod +x /etc/update-motd.d/20-fastfetch \
     && apt-get -qqy --purge autoremove \
     && apt-get -qqy clean \
     && rm -rf /var/lib/apt/lists/* \

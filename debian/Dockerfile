@@ -1,6 +1,6 @@
 FROM snowdreamtech/debian:12.8.0 AS builder
 
-ENV OPENSSH_VERSION=1:9.2p1-2+deb12u3
+ENV OPENSSH_VERSION=1:9.2p1-2+deb12u5
 
 RUN mkdir /workspace
 WORKDIR /workspace

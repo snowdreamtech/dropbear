@@ -1,6 +1,6 @@
 FROM snowdreamtech/alpine:3.21.0 AS builder
 
-ENV OPENSSH_VERSION=9.9_p1-r2
+ENV OPENSSH_VERSION=9.9_p2-r0
 
 RUN mkdir /workspace
 WORKDIR /workspace

@@ -1,4 +1,4 @@
-FROM snowdreamtech/alpine:3.21.0 AS builder
+FROM snowdreamtech/alpine:3.21.3 AS builder
 
 ENV OPENSSH_VERSION=9.9_p2-r0
 
@@ -10,7 +10,7 @@ RUN apk add --no-cache openssh@main=$OPENSSH_VERSION \
 
 
 
-FROM snowdreamtech/alpine:3.21.0
+FROM snowdreamtech/alpine:3.21.3
 
 # OCI annotations to image
 LABEL org.opencontainers.image.authors="Snowdream Tech" \

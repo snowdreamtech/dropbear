@@ -1,4 +1,4 @@
-FROM snowdreamtech/debian:12.8.0 AS builder
+FROM snowdreamtech/debian:12.10.0 AS builder
 
 ENV OPENSSH_VERSION=1:9.2p1-2+deb12u5
 
@@ -20,7 +20,7 @@ RUN set -eux \
 
 
 
-FROM snowdreamtech/debian:12.8.0
+FROM snowdreamtech/debian:12.10.0
 
 # OCI annotations to image
 LABEL org.opencontainers.image.authors="Snowdream Tech" \

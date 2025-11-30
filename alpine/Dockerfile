@@ -27,7 +27,7 @@ USER root
 WORKDIR /root
 
 # keep the docker container running
-ARG KEEPALIVE=0 \
+ARG KEEPALIVE=1 \
     # The cap_net_bind_service capability in Linux allows a process to bind a socket to Internet domain privileged ports, 
     # which are port numbers less than 1024. 
     CAP_NET_BIND_SERVICE=0 \

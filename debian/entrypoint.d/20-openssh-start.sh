@@ -11,7 +11,7 @@ fi
 
 if [ -z "${SSH_ROOT_CRED}" ]; then {
     SSH_ROOT_CRED=$(openssl rand -base64 33)
-    echo "Generate random ssh root password:${SSH_ROOT_CRED}"
+    echo "Generate random ssh root password:  ${SSH_ROOT_CRED}"
 }
 fi
 

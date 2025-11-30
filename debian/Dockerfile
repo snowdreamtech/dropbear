@@ -69,7 +69,7 @@ ENV DEBIAN_FRONTEND=${DEBIAN_FRONTEND} \
     WORKDIR=${WORKDIR} 
 
 ENV DROPBEAR_VERSION=2025.88-2 \
-    SSH_ROOT_PASSWORD=
+    SSH_ROOT_CRED=
 
 # Create a user with PUID and PGID
 RUN if [ "${USER}" != "root" ] && [ ! -d "/home/${USER}" ] && [ "${PUID}" -ne 0 ] && [ "${PGID}" -ne 0 ]; then \

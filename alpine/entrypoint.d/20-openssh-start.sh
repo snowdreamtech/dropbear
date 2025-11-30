@@ -15,14 +15,14 @@ crond >/dev/null 2>&1
 /etc/periodic/15min/motd.sh >/dev/null 2>&1
 
 # openssl rand -base64 33
-if [ -z "${SSH_ROOT_PASSWORD}" ]; then {
-    SSH_ROOT_PASSWORD=$(openssl rand -base64 33)
-    echo "Generate random ssh root password:${SSH_ROOT_PASSWORD}"
+if [ -z "${SSH_ROOT_CRED}" ]; then {
+    SSH_ROOT_CRED=$(openssl rand -base64 33)
+    echo "Generate random ssh root password:${SSH_ROOT_CRED}"
 }
 fi
 
 # change the password for root
-echo "root:$SSH_ROOT_PASSWORD" | chpasswd >/dev/null 2>&1
+echo "root:$SSH_ROOT_CRED" | chpasswd >/dev/null 2>&1
 
 # generate ssh keys
 if [ ! -d "$HOME/.ssh" ]; then

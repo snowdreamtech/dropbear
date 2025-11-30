@@ -26,10 +26,10 @@ echo "root:$SSH_ROOT_CRED" | chpasswd >/dev/null 2>&1
 
 # generate ssh keys
 if [ ! -d "$HOME/.ssh" ]; then
-  mkdir -p $HOME/.ssh
-  dropbearkey -t ed25519 -C "user@example.com" -f $HOME/.ssh/id_ed25519 >/dev/null 2>&1
-  dropbearkey -t rsa -s 4096 -C "user@example.com" -f $HOME/.ssh/id_rsa >/dev/null 2>&1
-  dropbearkey -t ecdsa -s 521 -C "user@example.com" -f $HOME/.ssh/id_ecdsa >/dev/null 2>&1
+  mkdir -p "$HOME/.ssh"
+  dropbearkey -t ed25519 -C "user@example.com" -f "$HOME/.ssh/id_ed25519" >/dev/null 2>&1&1
+  dropbearkey -t rsa -s 4096 -C "user@example.com" -f "$HOME/.ssh/id_rsa" >/dev/null 2>&1
+  dropbearkey -t ecdsa -s 521 -C "user@example.com" -f "$HOME/.ssh/id_ecdsa" >/dev/null 2>&1
 fi
 
 # start dropbear

@@ -1,0 +1,30 @@
+#!/bin/sh
+set -e
+
+# ssh-keygen -A
+if [ ! -f "/etc/dropbear/dropbear_rsa_host_key" ]; then
+  dropbearkey -t ed25519 -f /etc/dropbear/dropbear_ed25519_host_key >/dev/null 2>&1
+  dropbearkey -t rsa -s 4096 -f /etc/dropbear/dropbear_rsa_host_key >/dev/null 2>&1
+  dropbearkey -t ecdsa -s 521 -f /etc/dropbear/dropbear_ecdsa_host_key >/dev/null 2>&1
+fi
+
+
+if [ -z "${SSH_ROOT_PASSWORD}" ]; then {
+    SSH_ROOT_PASSWORD=$(openssl rand -base64 33)
+    echo "Generate random ssh root password:${SSH_ROOT_PASSWORD}"
+}
+fi
+
+# change the password for root
+echo "root:$SSH_ROOT_PASSWORD" | chpasswd >/dev/null 2>&1
+
+# generate ssh keys
+if [ ! -d "$HOME/.ssh" ]; then
+  mkdir -p $HOME/.ssh
+  dropbearkey -t ed25519  -f $HOME/.ssh/id_ed25519 >/dev/null 2>&1
+  dropbearkey -t rsa -s 4096  -f $HOME/.ssh/id_rsa >/dev/null 2>&1
+  dropbearkey -t ecdsa -s 521  -f $HOME/.ssh/id_ecdsa >/dev/null 2>&1
+fi
+
+# start dropbear
+/usr/sbin/dropbear

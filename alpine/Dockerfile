@@ -1,6 +1,6 @@
 FROM snowdreamtech/alpine:3.22.2 AS builder
 
-ENV OPENSSH_VERSION=9.9_p2-r0
+ENV OPENSSH_VERSION=10.0_p1-r9
 
 RUN apk add --no-cache openssh@main=$OPENSSH_VERSION \
     && cp $(which sftp-server) $(which sftp) /root/

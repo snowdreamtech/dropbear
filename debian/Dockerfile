@@ -1,6 +1,6 @@
 FROM snowdreamtech/debian:13.1.0 AS builder
 
-ENV OPENSSH_VERSION=1:9.2p1-2+deb12u5
+ENV OPENSSH_VERSION=1:10.0p1-7
 
 RUN set -eux \
     && apt-get -qqy update  \

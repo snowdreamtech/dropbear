@@ -17,7 +17,7 @@ LABEL org.opencontainers.image.authors="Snowdream Tech" \
     org.opencontainers.image.licenses="MIT" \
     org.opencontainers.image.source="https://github.com/snowdreamtech/dropbear" \
     org.opencontainers.image.vendor="Snowdream Tech" \
-    org.opencontainers.image.version="2024.86" \
+    org.opencontainers.image.version="2025.88" \
     org.opencontainers.image.url="https://github.com/snowdreamtech/dropbear"
     
 # Switch to the user
@@ -56,7 +56,7 @@ ENV KEEPALIVE=${KEEPALIVE} \
     USER=${USER} \
     WORKDIR=${WORKDIR} 
 
-ENV DROPBEAR_VERSION=2024.86-r0 \
+ENV DROPBEAR_VERSION=2025.88-r1 \
     SSH_ROOT_PASSWORD=
 
 # Create a user with PUID and PGID

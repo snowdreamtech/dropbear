@@ -94,7 +94,7 @@ RUN set -eux \
     && rm -rf /tmp/* \
     && rm -rf /var/tmp/*
 
-COPY --from=builder /workspace/sftp* /usr/libexec/
+COPY --from=builder /root/sftp* /usr/libexec/
 
 RUN mkdir -p /usr/lib/ssh/ \
     && ln -s /usr/libexec/sftp-server /usr/lib/ssh/sftp-server \

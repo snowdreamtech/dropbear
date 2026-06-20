@@ -20,15 +20,6 @@ if [ ! -f "/etc/dropbear/dropbear_rsa_host_key" ]; then
   dropbearkey -t ecdsa -s 521 -f /etc/dropbear/dropbear_ecdsa_host_key >/dev/null 2>&1
 fi
 
-# generate ssh keys
-if [ ! -d "/root/.ssh" ]; then
-  mkdir -p /root/.ssh
-  chmod 700 /root/.ssh
-  dropbearkey -t ed25519 -f /root/.ssh/id_ed25519 >/dev/null 2>&1 || true
-  dropbearkey -t rsa -s 4096 -f /root/.ssh/id_rsa >/dev/null 2>&1 || true
-  dropbearkey -t ecdsa -s 521 -f /root/.ssh/id_ecdsa >/dev/null 2>&1 || true
-  chmod 600 /root/.ssh/id_* >/dev/null 2>&1 || true
-fi
 
 # Generate motd and update it periodically in background
 (

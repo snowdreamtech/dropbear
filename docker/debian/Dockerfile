@@ -71,9 +71,6 @@ RUN set -eux \
     fastfetch \
     xauth \
     && mkdir -p /usr/libexec \
-    && echo '#!/bin/sh' | tee /etc/update-motd.d/20-fastfetch \
-    && echo 'fastfetch --pipe false' | tee -a /etc/update-motd.d/20-fastfetch \
-    && chmod +x /etc/update-motd.d/20-fastfetch \
     && apt-get -qqy --purge autoremove \
     && apt-get -qqy clean \
     && rm -rf /var/lib/apt/lists/* \
@@ -88,9 +85,11 @@ RUN mkdir -p /usr/lib/ssh/ \
     && chmod +x /usr/local/bin/sftp
 
 # Container Orchestration Files
+COPY motd.sh /usr/local/bin/motd.sh
 COPY entrypoint.d /usr/local/bin/entrypoint.d
 
-RUN chmod +x /usr/local/bin/entrypoint.d/*
+RUN chmod +x /usr/local/bin/motd.sh \
+    && chmod +x /usr/local/bin/entrypoint.d/*
 
 # Standard Healthcheck (Verification of core system responsiveness)
 HEALTHCHECK NONE

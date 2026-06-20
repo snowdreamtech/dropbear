@@ -30,7 +30,7 @@ ARG BUILDTIME \
     PUID=0 \
     USER=root \
     WORKDIR=/root \
-    DROPBEAR_VERSION=2022.83-1+deb12u3
+    DROPBEAR_VERSION=2025.89-1~deb13u1
 
 # Standard OCI Metadata (https://github.com/opencontainers/image-spec)
 LABEL org.opencontainers.image.authors="Snowdream Tech" \

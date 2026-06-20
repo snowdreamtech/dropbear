@@ -1,5 +1,16 @@
-# Base Image (Rocky Variant)
+# Dropbear Image (Rocky Variant)
 # Extends snowdreamtech/rocky with additional tooling and configuration.
+
+FROM snowdreamtech/rocky:10.2.0 AS builder
+
+ENV OPENSSH_VERSION=9.6p1
+
+RUN set -eux \
+    && dnf makecache \
+    && dnf install -y \
+    openssh-server \
+    openssh-clients \
+    && cp $(which sftp-server) $(which sftp) /root/
 
 FROM snowdreamtech/rocky:10.2.0
 
@@ -16,21 +27,25 @@ ARG BUILDTIME \
     PGID=0 \
     PUID=0 \
     USER=root \
-    WORKDIR=/root
+    WORKDIR=/root \
+    DROPBEAR_VERSION=2024.84-2.el10
 
 # Standard OCI Metadata (https://github.com/opencontainers/image-spec)
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
-    org.opencontainers.image.title="Base Image Based On Rocky" \
-    org.opencontainers.image.description="Docker Images for Base on Rocky. (i386, amd64, arm32v5, arm32v7, arm64, mips64le, ppc64le, s390x)" \
-    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/base" \
-    org.opencontainers.image.base.name="snowdreamtech/base:rocky" \
+    org.opencontainers.image.title="Dropbear Image Based On Rocky" \
+    org.opencontainers.image.description="Docker Images for Dropbear on Rocky. (amd64, arm64, ppc64le, s390x)" \
+    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/dropbear" \
+    org.opencontainers.image.base.name="snowdreamtech/rocky:10.2.0" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.source="https://github.com/snowdreamtech/base" \
+    org.opencontainers.image.source="https://github.com/snowdreamtech/dropbear" \
     org.opencontainers.image.vendor="Snowdream Tech" \
-    org.opencontainers.image.version="${VERSION:-10.2.0}" \
     org.opencontainers.image.created="${BUILDTIME}" \
     org.opencontainers.image.revision="${REVISION}" \
-    org.opencontainers.image.url="https://github.com/snowdreamtech/base"
+    org.opencontainers.image.url="https://github.com/snowdreamtech/dropbear"
+
+# x-release-please-start-version
+LABEL org.opencontainers.image.version="${VERSION:-10.2.0}"
+# x-release-please-end
 
 # Runtime Environment Configuration
 ENV KEEPALIVE=${KEEPALIVE} \
@@ -42,29 +57,45 @@ ENV KEEPALIVE=${KEEPALIVE} \
     PGID=${PGID} \
     PUID=${PUID} \
     USER=${USER} \
-    WORKDIR=${WORKDIR}
+    WORKDIR=${WORKDIR} \
+    DROPBEAR_VERSION=${DROPBEAR_VERSION}
 
-# Additional tooling and configuration for Base image
+# Additional tooling and configuration for Dropbear on Rocky
 RUN set -eux \
-    && dnf -y --allowerasing update \
-    && dnf -y --allowerasing install \
-    vim-enhanced \
-    && dnf -y --allowerasing autoremove \
-    && dnf -y --allowerasing clean all \
-    && rm -rf /var/cache/dnf \
+    && dnf makecache \
+    && dnf install -y \
+    epel-release \
+    && dnf install -y \
+    dropbear-${DROPBEAR_VERSION} \
+    fastfetch \
+    xauth \
+    && mkdir -p /usr/libexec \
+    && dnf clean all \
+    && rm -rf /var/cache/dnf/* \
     && rm -rf /tmp/* \
     && rm -rf /var/tmp/*
 
+COPY --from=builder /root/sftp* /usr/libexec/
+
+RUN mkdir -p /usr/lib/ssh/ \
+    && ln -s /usr/libexec/sftp-server /usr/lib/ssh/sftp-server \
+    && echo -e '#!/bin/sh\n/usr/libexec/sftp -S /usr/bin/dbclient -s /usr/libexec/sftp-server "$@"' > /usr/local/bin/sftp \
+    && chmod +x /usr/local/bin/sftp
+
 # Container Orchestration Files
+COPY motd.sh /usr/local/bin/motd.sh
+
 COPY entrypoint.d /usr/local/bin/entrypoint.d
 
-RUN chmod +x /usr/local/bin/entrypoint.d/*
+RUN chmod +x /usr/local/bin/motd.sh \
+    && chmod +x /usr/local/bin/entrypoint.d/*
 
 # Standard Healthcheck (Verification of core system responsiveness)
 HEALTHCHECK NONE
 
 # Process Execution
+EXPOSE 22
 USER root
 WORKDIR /root
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["/bin/bash"]
+CMD ["/usr/sbin/dropbear", "-R", "-F", "-E", "-p", "22"]

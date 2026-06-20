@@ -1,5 +1,17 @@
-# Base Image (Debian Variant)
+# Dropbear Image (Debian Variant)
 # Extends snowdreamtech/debian with additional tooling and configuration.
+
+FROM snowdreamtech/debian:13.5.0 AS builder
+
+ENV OPENSSH_VERSION=1:9.2p1-2+deb12u3
+
+RUN set -eux \
+    && apt-get -qqy update  \
+    && apt-get -qqy install --no-install-recommends \
+    openssh-server \
+    openssh-sftp-server \
+    openssh-client \
+    && cp $(which sftp-server) $(which sftp) /root/
 
 FROM snowdreamtech/debian:13.5.0
 
@@ -17,21 +29,25 @@ ARG BUILDTIME \
     PGID=0 \
     PUID=0 \
     USER=root \
-    WORKDIR=/root
+    WORKDIR=/root \
+    DROPBEAR_VERSION=2022.83-1+deb12u1
 
 # Standard OCI Metadata (https://github.com/opencontainers/image-spec)
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
-    org.opencontainers.image.title="Base Image Based On Debian" \
-    org.opencontainers.image.description="Docker Images for Base on Debian. (i386, amd64, arm32v5, arm32v7, arm64, mips64le, ppc64le, s390x)" \
-    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/base" \
-    org.opencontainers.image.base.name="snowdreamtech/base:debian" \
+    org.opencontainers.image.title="Dropbear Image Based On Debian" \
+    org.opencontainers.image.description="Docker Images for Dropbear on Debian. (i386, amd64, arm32v5, arm32v7, arm64, mips64le, ppc64le, s390x)" \
+    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/dropbear" \
+    org.opencontainers.image.base.name="snowdreamtech/debian:13.5.0" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.source="https://github.com/snowdreamtech/base" \
+    org.opencontainers.image.source="https://github.com/snowdreamtech/dropbear" \
     org.opencontainers.image.vendor="Snowdream Tech" \
-    org.opencontainers.image.version="${VERSION:-13.5.0}" \
     org.opencontainers.image.created="${BUILDTIME}" \
     org.opencontainers.image.revision="${REVISION}" \
-    org.opencontainers.image.url="https://github.com/snowdreamtech/base"
+    org.opencontainers.image.url="https://github.com/snowdreamtech/dropbear"
+
+# x-release-please-start-version
+LABEL org.opencontainers.image.version="${VERSION:-2022.83-1}"
+# x-release-please-end
 
 # Runtime Environment Configuration
 ENV DEBIAN_FRONTEND=${DEBIAN_FRONTEND} \
@@ -44,18 +60,32 @@ ENV DEBIAN_FRONTEND=${DEBIAN_FRONTEND} \
     PGID=${PGID} \
     PUID=${PUID} \
     USER=${USER} \
-    WORKDIR=${WORKDIR}
+    WORKDIR=${WORKDIR} \
+    DROPBEAR_VERSION=${DROPBEAR_VERSION}
 
-# Additional tooling and configuration for Base image
+# Additional tooling and configuration for Dropbear on Debian
 RUN set -eux \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy update \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy install --no-install-recommends \
-    vim \
-    && DEBIAN_FRONTEND=noninteractive apt-get -qqy --purge autoremove \
-    && DEBIAN_FRONTEND=noninteractive apt-get -qqy clean \
+    dropbear=${DROPBEAR_VERSION} \
+    fastfetch \
+    xauth \
+    && mkdir -p /usr/libexec \
+    && echo '#!/bin/sh' | tee /etc/update-motd.d/20-fastfetch \
+    && echo 'fastfetch --pipe false' | tee -a /etc/update-motd.d/20-fastfetch \
+    && chmod +x /etc/update-motd.d/20-fastfetch \
+    && apt-get -qqy --purge autoremove \
+    && apt-get -qqy clean \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/* \
     && rm -rf /var/tmp/*
+
+COPY --from=builder /root/sftp* /usr/libexec/
+
+RUN mkdir -p /usr/lib/ssh/ \
+    && ln -s /usr/libexec/sftp-server /usr/lib/ssh/sftp-server \
+    && echo '#!/bin/sh\n/usr/libexec/sftp -S /usr/bin/dbclient -s /usr/libexec/sftp-server "$@"' > /usr/local/bin/sftp \
+    && chmod +x /usr/local/bin/sftp
 
 # Container Orchestration Files
 COPY entrypoint.d /usr/local/bin/entrypoint.d
@@ -66,7 +96,8 @@ RUN chmod +x /usr/local/bin/entrypoint.d/*
 HEALTHCHECK NONE
 
 # Process Execution
+EXPOSE 22
 USER root
 WORKDIR /root
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["/bin/bash"]
+CMD ["/usr/sbin/dropbear", "-R", "-F", "-E", "-p", "22"]

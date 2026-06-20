@@ -8,9 +8,9 @@ ENV OPENSSH_VERSION=1:10.0p1-7+deb13u4
 RUN set -eux \
     && apt-get -qqy update  \
     && apt-get -qqy install --no-install-recommends \
-    openssh-server \
-    openssh-sftp-server \
-    openssh-client \
+    openssh-server=${OPENSSH_VERSION} \
+    openssh-sftp-server=${OPENSSH_VERSION} \
+    openssh-client=${OPENSSH_VERSION} \
     && cp $(which sftp-server) $(which sftp) /root/
 
 FROM snowdreamtech/debian:13.5.0

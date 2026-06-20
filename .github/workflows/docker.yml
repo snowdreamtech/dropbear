@@ -484,6 +484,7 @@ jobs:
                 printf '  ✓ User context: ' && id -un && \
                 printf '  ✓ Package manager: ' && \
                 ${pkg_check} && echo 'functional' && \
+                printf '  ✓ Dropbear version: ' && dropbear -V 2>&1 && \
                 echo '  ✓ All checks passed'
               "; then
               return 0

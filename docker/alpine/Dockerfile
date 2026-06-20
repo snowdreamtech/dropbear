@@ -61,10 +61,10 @@ ENV KEEPALIVE=${KEEPALIVE} \
 RUN apk update \
     && apk add --no-cache \
     dropbear=${DROPBEAR_VERSION} \
-    dropbear-convert \
-    dropbear-dbclient \
-    dropbear-scp \
-    dropbear-ssh \
+    dropbear-convert=${DROPBEAR_VERSION} \
+    dropbear-dbclient=${DROPBEAR_VERSION} \
+    dropbear-scp=${DROPBEAR_VERSION} \
+    dropbear-ssh=${DROPBEAR_VERSION} \
     fastfetch \
     xauth \
     && mkdir -p /usr/libexec

@@ -25,7 +25,7 @@ ARG BUILDTIME \
     PUID=0 \
     USER=root \
     WORKDIR=/root \
-    DROPBEAR_VERSION=2024.85-r0
+    DROPBEAR_VERSION=2026.91-r0
 
 # Standard OCI Metadata (https://github.com/opencontainers/image-spec)
 LABEL org.opencontainers.image.authors="Snowdream Tech" \

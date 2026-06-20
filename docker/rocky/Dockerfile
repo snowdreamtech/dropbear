@@ -3,7 +3,7 @@
 
 FROM snowdreamtech/rocky:10.2.0 AS builder
 
-ENV OPENSSH_VERSION=9.6p1
+ENV OPENSSH_VERSION=9.9p1-23.el10_2.rocky.0.1
 
 RUN set -eux \
     && dnf makecache \

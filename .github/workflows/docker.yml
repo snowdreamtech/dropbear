@@ -302,9 +302,9 @@ jobs:
         uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6.1.0
         with:
           images: |
-            name=snowdreamtech/base,enable=true
-            name=ghcr.io/snowdreamtech/base,enable=true
-            name=quay.io/snowdreamtech/base,enable=true
+            name=snowdreamtech/dropbear,enable=true
+            name=ghcr.io/snowdreamtech/dropbear,enable=true
+            name=quay.io/snowdreamtech/dropbear,enable=true
           flavor: |
             latest=false
             prefix=
@@ -458,13 +458,13 @@ jobs:
             # Build package manager check based on variant
             case "${PACKAGE_MANAGER}" in
               apk)
-                pkg_check='command -v apk >/dev/null && apk info busybox >/dev/null 2>&1'
+                pkg_check='command -v apk >/dev/null && apk info dropbear >/dev/null 2>&1'
                 ;;
               apt-get)
-                pkg_check='command -v apt-get >/dev/null && dpkg -l bash >/dev/null 2>&1'
+                pkg_check='command -v apt-get >/dev/null && dpkg -l dropbear >/dev/null 2>&1'
                 ;;
               dnf)
-                pkg_check='command -v dnf >/dev/null && rpm -q bash >/dev/null 2>&1'
+                pkg_check='command -v dnf >/dev/null && rpm -q dropbear >/dev/null 2>&1'
                 ;;
               *)
                 pkg_check='echo "unknown"'
@@ -594,7 +594,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v4.36.2
         with:
           sarif_file: "trivy-image-${{ matrix.variant }}.sarif"
-          category: "trivy-image-base-${{ matrix.variant }}"
+          category: "trivy-image-dropbear-${{ matrix.variant }}"
 
       - name: "🗑️ Clean Up Build Artifacts"
         if: steps.variant-filter.outputs.skip != 'true' && always()

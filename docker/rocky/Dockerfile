@@ -8,8 +8,8 @@ ENV OPENSSH_VERSION=9.9p1-23.el10_2.rocky.0.1
 RUN set -eux \
     && dnf makecache \
     && dnf install -y \
-    openssh-server-${OPENSSH_VERSION} \
-    openssh-clients-${OPENSSH_VERSION} \
+    openssh-server=${OPENSSH_VERSION} \
+    openssh-clients=${OPENSSH_VERSION} \
     && cp $(which sftp-server) $(which sftp) /root/
 
 FROM snowdreamtech/rocky:10.2.0
@@ -66,7 +66,7 @@ RUN set -eux \
     && dnf install -y \
     epel-release \
     && dnf install -y \
-    dropbear-${DROPBEAR_VERSION} \
+    dropbear=${DROPBEAR_VERSION} \
     fastfetch \
     xauth \
     && mkdir -p /usr/libexec \

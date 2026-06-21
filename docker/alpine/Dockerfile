@@ -6,7 +6,7 @@ FROM snowdreamtech/alpine:3.24.0 AS builder
 ENV OPENSSH_VERSION=10.3_p1-r0
 
 RUN apk add --no-cache openssh@main=$OPENSSH_VERSION \
-    || apk add --no-cache openssh \
+    || apk add --no-cache openssh=${OPENSSH_VERSION} \
     && cp $(find /usr/lib /usr/libexec -name sftp-server 2>/dev/null | head -n 1) $(which sftp) /root/
 
 FROM snowdreamtech/alpine:3.24.0
@@ -61,10 +61,10 @@ ENV KEEPALIVE=${KEEPALIVE} \
 RUN apk update \
     && apk add --no-cache \
     dropbear=${DROPBEAR_VERSION} \
-    dropbear-convert \
-    dropbear-dbclient \
-    dropbear-scp \
-    dropbear-ssh \
+    dropbear-convert=${DROPBEAR_VERSION} \
+    dropbear-dbclient=${DROPBEAR_VERSION} \
+    dropbear-scp=${DROPBEAR_VERSION} \
+    dropbear-ssh=${DROPBEAR_VERSION} \
     fastfetch \
     xauth \
     && mkdir -p /usr/libexec

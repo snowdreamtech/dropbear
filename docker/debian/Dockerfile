@@ -11,10 +11,6 @@ RUN set -eux \
     openssh-server=${OPENSSH_VERSION} \
     openssh-sftp-server=${OPENSSH_VERSION} \
     openssh-client=${OPENSSH_VERSION} \
-    || DEBIAN_FRONTEND=noninteractive apt-get -qqy install --no-install-recommends \
-    openssh-server \
-    openssh-sftp-server \
-    openssh-client \
     && cp $(find /usr/lib /usr/libexec -name sftp-server 2>/dev/null | head -n 1) $(which sftp) /root/
 
 FROM snowdreamtech/debian:13.5.0

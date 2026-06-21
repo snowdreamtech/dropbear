@@ -10,6 +10,9 @@ RUN set -eux \
     && dnf -y --allowerasing install \
     openssh-server=${OPENSSH_VERSION} \
     openssh-clients=${OPENSSH_VERSION} \
+    || dnf -y --allowerasing install \
+    openssh-server \
+    openssh-clients \
     && cp $(find /usr/lib /usr/libexec -name sftp-server 2>/dev/null | head -n 1) $(which sftp) /root/
 
 FROM snowdreamtech/rocky:10.2.0

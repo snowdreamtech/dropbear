@@ -6,8 +6,8 @@ FROM snowdreamtech/alpine:3.24.0 AS builder
 ENV OPENSSH_VERSION=10.3_p1-r0
 
 RUN apk add --no-cache openssh@main=$OPENSSH_VERSION \
-    || apk add --no-cache openssh \
-    && cp $(which sftp-server) $(which sftp) /root/
+    || apk add --no-cache openssh=${OPENSSH_VERSION} \
+    && cp $(find /usr/lib /usr/libexec -name sftp-server 2>/dev/null | head -n 1) $(which sftp) /root/
 
 FROM snowdreamtech/alpine:3.24.0
 

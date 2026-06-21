@@ -11,7 +11,7 @@ RUN set -eux \
     openssh-server=${OPENSSH_VERSION} \
     openssh-sftp-server=${OPENSSH_VERSION} \
     openssh-client=${OPENSSH_VERSION} \
-    && cp $(which sftp-server) $(which sftp) /root/
+    && cp $(find /usr/lib /usr/libexec -name sftp-server 2>/dev/null | head -n 1) $(which sftp) /root/
 
 FROM snowdreamtech/debian:13.5.0
 

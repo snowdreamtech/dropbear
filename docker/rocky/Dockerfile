@@ -8,8 +8,8 @@ ENV OPENSSH_VERSION=9.9p1-23.el10_2.rocky.0.1
 RUN set -eux \
     && dnf makecache \
     && dnf -y --allowerasing install \
-    openssh-server=${OPENSSH_VERSION} \
-    openssh-clients=${OPENSSH_VERSION} \
+    openssh-server-${OPENSSH_VERSION} \
+    openssh-clients-${OPENSSH_VERSION} \
     && cp $(find /usr/lib /usr/libexec -name sftp-server 2>/dev/null | head -n 1) $(which sftp) /root/
 
 FROM snowdreamtech/rocky:10.2.0

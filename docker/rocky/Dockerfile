@@ -66,7 +66,7 @@ RUN set -eux \
     && dnf -y --allowerasing install \
     epel-release \
     && dnf -y --allowerasing install \
-    dropbear=${DROPBEAR_VERSION} \
+    dropbear-${DROPBEAR_VERSION} \
     fastfetch \
     xauth \
     && mkdir -p /usr/libexec \

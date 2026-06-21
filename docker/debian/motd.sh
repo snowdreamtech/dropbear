@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cat > /etc/motd <<MOTDEOF
+cat >/etc/motd <<MOTDEOF
 
 The programs included with the Debian GNU/Linux system are free software;
 the exact distribution terms for each program are described in the

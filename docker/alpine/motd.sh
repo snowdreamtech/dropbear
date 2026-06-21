@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cat > /etc/motd <<EOF
+cat >/etc/motd <<EOF
 Welcome to Alpine!
 
 The Alpine Wiki contains a large amount of how-to guides and general

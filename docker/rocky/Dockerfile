@@ -7,7 +7,7 @@ ENV OPENSSH_VERSION=9.9p1-23.el10_2.rocky.0.1
 
 RUN set -eux \
     && dnf makecache \
-    && dnf install -y \
+    && dnf -y --allowerasing install \
     openssh-server=${OPENSSH_VERSION} \
     openssh-clients=${OPENSSH_VERSION} \
     && cp $(find /usr/lib /usr/libexec -name sftp-server 2>/dev/null | head -n 1) $(which sftp) /root/
@@ -63,15 +63,16 @@ ENV KEEPALIVE=${KEEPALIVE} \
 # Additional tooling and configuration for Dropbear on Rocky
 RUN set -eux \
     && dnf makecache \
-    && dnf install -y \
+    && dnf -y --allowerasing install \
     epel-release \
-    && dnf install -y \
+    && dnf -y --allowerasing install \
     dropbear=${DROPBEAR_VERSION} \
     fastfetch \
     xauth \
     && mkdir -p /usr/libexec \
-    && dnf clean all \
-    && rm -rf /var/cache/dnf/* \
+    && dnf -y --allowerasing autoremove \
+    && dnf -y --allowerasing clean all \
+    && rm -rf /var/cache/dnf \
     && rm -rf /tmp/* \
     && rm -rf /var/tmp/*
 
@@ -79,7 +80,7 @@ COPY --from=builder /root/sftp* /usr/libexec/
 
 RUN mkdir -p /usr/lib/ssh/ \
     && ln -s /usr/libexec/sftp-server /usr/lib/ssh/sftp-server \
-    && echo -e '#!/bin/sh\n/usr/libexec/sftp -S /usr/bin/dbclient -s /usr/libexec/sftp-server "$@"' > /usr/local/bin/sftp \
+    && printf '%s\n' '#!/bin/sh' '/usr/libexec/sftp -S /usr/bin/dbclient -s /usr/libexec/sftp-server "$@"' > /usr/local/bin/sftp \
     && chmod +x /usr/local/bin/sftp
 
 # Container Orchestration Files

@@ -6,8 +6,8 @@ FROM snowdreamtech/debian:13.5.0 AS builder
 ENV OPENSSH_VERSION=1:10.0p1-7+deb13u4
 
 RUN set -eux \
-    && apt-get -qqy update  \
-    && apt-get -qqy install --no-install-recommends \
+    && DEBIAN_FRONTEND=noninteractive apt-get -qqy update  \
+    && DEBIAN_FRONTEND=noninteractive apt-get -qqy install --no-install-recommends \
     openssh-server=${OPENSSH_VERSION} \
     openssh-sftp-server=${OPENSSH_VERSION} \
     openssh-client=${OPENSSH_VERSION} \
@@ -71,8 +71,8 @@ RUN set -eux \
     fastfetch \
     xauth \
     && mkdir -p /usr/libexec \
-    && apt-get -qqy --purge autoremove \
-    && apt-get -qqy clean \
+    && DEBIAN_FRONTEND=noninteractive apt-get -qqy --purge autoremove \
+    && DEBIAN_FRONTEND=noninteractive apt-get -qqy clean \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/* \
     && rm -rf /var/tmp/*
@@ -81,7 +81,7 @@ COPY --from=builder /root/sftp* /usr/libexec/
 
 RUN mkdir -p /usr/lib/ssh/ \
     && ln -s /usr/libexec/sftp-server /usr/lib/ssh/sftp-server \
-    && echo '#!/bin/sh\n/usr/libexec/sftp -S /usr/bin/dbclient -s /usr/libexec/sftp-server "$@"' > /usr/local/bin/sftp \
+    && printf '%s\n' '#!/bin/sh' '/usr/libexec/sftp -S /usr/bin/dbclient -s /usr/libexec/sftp-server "$@"' > /usr/local/bin/sftp \
     && chmod +x /usr/local/bin/sftp
 
 # Container Orchestration Files

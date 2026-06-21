@@ -73,7 +73,7 @@ COPY --from=builder /root/sftp* /usr/libexec/
 
 RUN mkdir -p /usr/lib/ssh/ \
     && ln -s /usr/libexec/sftp-server /usr/lib/ssh/sftp-server \
-    && echo -e '#!/bin/sh\n/usr/libexec/sftp -S /usr/bin/dbclient -s /usr/libexec/sftp-server "$@"' > /usr/local/bin/sftp \
+    && printf '%s\n' '#!/bin/sh' '/usr/libexec/sftp -S /usr/bin/dbclient -s /usr/libexec/sftp-server "$@"' > /usr/local/bin/sftp \
     && chmod +x /usr/local/bin/sftp
 
 # Container Orchestration Files

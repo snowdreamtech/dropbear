@@ -1,7 +1,7 @@
 # Dropbear Image (Rocky Variant)
 # Extends snowdreamtech/rocky with additional tooling and configuration.
 
-FROM snowdreamtech/rocky:10.2.0 AS builder
+FROM ghcr.io/snowdreamtech/rocky:10.2.0 AS builder
 
 ENV OPENSSH_VERSION=9.9p1-23.el10_2.rocky.0.1
 
@@ -12,7 +12,7 @@ RUN set -eux \
     openssh-clients-${OPENSSH_VERSION} \
     && cp $(find /usr/lib /usr/libexec -name sftp-server 2>/dev/null | head -n 1) $(which sftp) /root/
 
-FROM snowdreamtech/rocky:10.2.0
+FROM ghcr.io/snowdreamtech/rocky:10.2.0
 
 # Build-time Configuration
 ARG BUILDTIME \
@@ -35,17 +35,14 @@ LABEL org.opencontainers.image.authors="Snowdream Tech" \
     org.opencontainers.image.title="Dropbear Image Based On Rocky" \
     org.opencontainers.image.description="Docker Images for Dropbear on Rocky. (amd64, arm64, ppc64le, s390x)" \
     org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/dropbear" \
-    org.opencontainers.image.base.name="snowdreamtech/rocky:10.2.0" \
+    org.opencontainers.image.base.name="ghcr.io/snowdreamtech/rocky:10.2.0" \
     org.opencontainers.image.licenses="MIT" \
     org.opencontainers.image.source="https://github.com/snowdreamtech/dropbear" \
     org.opencontainers.image.vendor="Snowdream Tech" \
+    org.opencontainers.image.version="${VERSION}" \
     org.opencontainers.image.created="${BUILDTIME}" \
     org.opencontainers.image.revision="${REVISION}" \
     org.opencontainers.image.url="https://github.com/snowdreamtech/dropbear"
-
-# x-release-please-start-version
-LABEL org.opencontainers.image.version="${VERSION:-10.2.0}"
-# x-release-please-end
 
 # Runtime Environment Configuration
 ENV KEEPALIVE=${KEEPALIVE} \
@@ -63,9 +60,9 @@ ENV KEEPALIVE=${KEEPALIVE} \
 # Additional tooling and configuration for Dropbear on Rocky
 RUN set -eux \
     && dnf makecache \
-    && dnf -y --allowerasing install \
+    && dnf -y --allowerasing --setopt=*.skip_if_unavailable=true install \
     epel-release \
-    && dnf -y --allowerasing install \
+    && dnf -y --allowerasing --setopt=*.skip_if_unavailable=true install \
     dropbear-${DROPBEAR_VERSION} \
     fastfetch \
     xauth \

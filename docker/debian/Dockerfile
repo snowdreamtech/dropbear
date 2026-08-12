@@ -1,7 +1,7 @@
 # Dropbear Image (Debian Variant)
 # Extends snowdreamtech/debian with additional tooling and configuration.
 
-FROM snowdreamtech/debian:13.5.0 AS builder
+FROM ghcr.io/snowdreamtech/debian:13.6.0 AS builder
 
 ENV OPENSSH_VERSION=1:10.0p1-7+deb13u4
 
@@ -13,7 +13,7 @@ RUN set -eux \
     openssh-client=${OPENSSH_VERSION} \
     && cp $(find /usr/lib /usr/libexec -name sftp-server 2>/dev/null | head -n 1) $(which sftp) /root/
 
-FROM snowdreamtech/debian:13.5.0
+FROM ghcr.io/snowdreamtech/debian:13.6.0
 
 # Build-time Configuration
 ARG BUILDTIME \
@@ -35,19 +35,16 @@ ARG BUILDTIME \
 # Standard OCI Metadata (https://github.com/opencontainers/image-spec)
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
     org.opencontainers.image.title="Dropbear Image Based On Debian" \
-    org.opencontainers.image.description="Docker Images for Dropbear on Debian. (i386, amd64, arm32v5, arm32v7, arm64, mips64le, ppc64le, s390x)" \
+    org.opencontainers.image.description="Docker Images for Dropbear on Debian. (amd64, arm32v7, arm64, ppc64le, riscv64, s390x)" \
     org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/dropbear" \
-    org.opencontainers.image.base.name="snowdreamtech/debian:13.5.0" \
+    org.opencontainers.image.base.name="ghcr.io/snowdreamtech/debian:13.6.0" \
     org.opencontainers.image.licenses="MIT" \
     org.opencontainers.image.source="https://github.com/snowdreamtech/dropbear" \
     org.opencontainers.image.vendor="Snowdream Tech" \
+    org.opencontainers.image.version="${VERSION}" \
     org.opencontainers.image.created="${BUILDTIME}" \
     org.opencontainers.image.revision="${REVISION}" \
     org.opencontainers.image.url="https://github.com/snowdreamtech/dropbear"
-
-# x-release-please-start-version
-LABEL org.opencontainers.image.version="${VERSION:-2022.83-1}"
-# x-release-please-end
 
 # Runtime Environment Configuration
 ENV DEBIAN_FRONTEND=${DEBIAN_FRONTEND} \

@@ -3,7 +3,7 @@
 
 FROM ghcr.io/snowdreamtech/alpine:3.24.1 AS builder
 
-ENV OPENSSH_VERSION=10.3_p1-r0
+ENV OPENSSH_VERSION=10.3_p1-r1
 
 RUN apk add --no-cache openssh=${OPENSSH_VERSION} \
     && cp $(find /usr/lib /usr/libexec -name sftp-server 2>/dev/null | head -n 1) $(which sftp) /root/

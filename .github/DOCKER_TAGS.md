@@ -1,10 +1,10 @@
 # Docker Image Tags Reference
 
-This document describes the Docker image tagging strategy for the base template project.
+This document describes the Docker image tagging strategy for the Dropbear project.
 
 ## Tag Naming Convention
 
-All images use the format: `snowdreamtech/base:TAG`
+All images use the format: `snowdreamtech/dropbear:TAG`
 
 Where `TAG` follows these patterns:
 
@@ -15,8 +15,8 @@ Where `TAG` follows these patterns:
 
 All tags are pushed to three registries:
 
-- **DockerHub**: `snowdreamtech/base:TAG`
-- **GitHub Container Registry**: `ghcr.io/snowdreamtech/base:TAG`
+- **DockerHub**: `snowdreamtech/dropbear:TAG`
+- **GitHub Container Registry**: `ghcr.io/snowdreamtech/dropbear:TAG`
 
 ## Tag Scenarios
 
@@ -31,10 +31,10 @@ git push origin dev
 **Generated tags:**
 
 ```
-snowdreamtech/base:dev-alpine
-snowdreamtech/base:dev-debian
-snowdreamtech/base:dev              # ← Debian (default)
-snowdreamtech/base:dev-rocky
+snowdreamtech/dropbear:dev-alpine
+snowdreamtech/dropbear:dev-debian
+snowdreamtech/dropbear:dev              # ← Debian (default)
+snowdreamtech/dropbear:dev-rocky
 ```
 
 #### Push to `main` branch
@@ -46,14 +46,14 @@ git push origin main
 **Generated tags:**
 
 ```
-snowdreamtech/base:main-alpine
-snowdreamtech/base:latest-alpine
-snowdreamtech/base:main-debian
-snowdreamtech/base:latest-debian
-snowdreamtech/base:main             # ← Debian (default)
-snowdreamtech/base:latest           # ← Debian (default)
-snowdreamtech/base:main-rocky
-snowdreamtech/base:latest-rocky
+snowdreamtech/dropbear:main-alpine
+snowdreamtech/dropbear:latest-alpine
+snowdreamtech/dropbear:main-debian
+snowdreamtech/dropbear:latest-debian
+snowdreamtech/dropbear:main             # ← Debian (default)
+snowdreamtech/dropbear:latest           # ← Debian (default)
+snowdreamtech/dropbear:main-rocky
+snowdreamtech/dropbear:latest-rocky
 ```
 
 ---
@@ -70,8 +70,8 @@ git push origin alpine-v3.23.4
 **Generated tags:**
 
 ```
-snowdreamtech/base:3.23.4-alpine
-snowdreamtech/base:latest-alpine
+snowdreamtech/dropbear:3.23.4-alpine
+snowdreamtech/dropbear:latest-alpine
 ```
 
 #### Debian Release
@@ -84,10 +84,10 @@ git push origin debian-v13.4.0
 **Generated tags:**
 
 ```
-snowdreamtech/base:13.4.0-debian
-snowdreamtech/base:latest-debian
-snowdreamtech/base:13.4.0           # ← Debian (default)
-snowdreamtech/base:latest           # ← Debian (default)
+snowdreamtech/dropbear:13.4.0-debian
+snowdreamtech/dropbear:latest-debian
+snowdreamtech/dropbear:13.4.0           # ← Debian (default)
+snowdreamtech/dropbear:latest           # ← Debian (default)
 ```
 
 #### Rocky Release
@@ -100,8 +100,8 @@ git push origin rocky-v10.1.0
 **Generated tags:**
 
 ```
-snowdreamtech/base:10.1.0-rocky
-snowdreamtech/base:latest-rocky
+snowdreamtech/dropbear:10.1.0-rocky
+snowdreamtech/dropbear:latest-rocky
 ```
 
 ---
@@ -114,18 +114,18 @@ snowdreamtech/base:latest-rocky
 
 ```
 # Alpine
-snowdreamtech/base:nightly-alpine
-snowdreamtech/base:20260427-alpine
+snowdreamtech/dropbear:nightly-alpine
+snowdreamtech/dropbear:20260427-alpine
 
 # Debian (with default tags)
-snowdreamtech/base:nightly-debian
-snowdreamtech/base:20260427-debian
-snowdreamtech/base:nightly          # ← Debian (default)
-snowdreamtech/base:20260427         # ← Debian (default)
+snowdreamtech/dropbear:nightly-debian
+snowdreamtech/dropbear:20260427-debian
+snowdreamtech/dropbear:nightly          # ← Debian (default)
+snowdreamtech/dropbear:20260427         # ← Debian (default)
 
 # Rocky
-snowdreamtech/base:nightly-rocky
-snowdreamtech/base:20260427-rocky
+snowdreamtech/dropbear:nightly-rocky
+snowdreamtech/dropbear:20260427-rocky
 ```
 
 ---
@@ -134,13 +134,13 @@ snowdreamtech/base:20260427-rocky
 
 Tags are generated with the following priority (higher number = higher priority):
 
-| Priority | Type | Example Tags | Trigger |
-|----------|------|--------------|---------|
-| 1000 | Nightly | `nightly`, `nightly-alpine` | Schedule |
-| 900 | Date | `20260427`, `20260427-alpine` | Schedule |
-| 800 | Version | `3.23.4-alpine`, `13.4.0` | Tag push |
-| 600 | Branch | `dev-alpine`, `main-debian` | Branch push |
-| 200 | Latest | `latest`, `latest-alpine` | Main/Tag |
+| Priority | Type    | Example Tags                  | Trigger     |
+| -------- | ------- | ----------------------------- | ----------- |
+| 1000     | Nightly | `nightly`, `nightly-alpine`   | Schedule    |
+| 900      | Date    | `20260427`, `20260427-alpine` | Schedule    |
+| 800      | Version | `3.23.4-alpine`, `13.4.0`     | Tag push    |
+| 600      | Branch  | `dev-alpine`, `main-debian`   | Branch push |
+| 200      | Latest  | `latest`, `latest-alpine`     | Main/Tag    |
 
 ---
 
@@ -151,21 +151,21 @@ Debian is designated as the **default variant** (`is_latest: true`), which means
 ✅ **Debian gets BOTH suffixed AND unsuffixed tags:**
 
 ```
-snowdreamtech/base:nightly-debian   # Variant-specific
-snowdreamtech/base:nightly          # Default (no suffix)
+snowdreamtech/dropbear:nightly-debian   # Variant-specific
+snowdreamtech/dropbear:nightly          # Default (no suffix)
 
-snowdreamtech/base:13.4.0-debian    # Variant-specific
-snowdreamtech/base:13.4.0           # Default (no suffix)
+snowdreamtech/dropbear:13.4.0-debian    # Variant-specific
+snowdreamtech/dropbear:13.4.0           # Default (no suffix)
 
-snowdreamtech/base:latest-debian    # Variant-specific
-snowdreamtech/base:latest           # Default (no suffix)
+snowdreamtech/dropbear:latest-debian    # Variant-specific
+snowdreamtech/dropbear:latest           # Default (no suffix)
 ```
 
 ❌ **Alpine and Rocky get ONLY suffixed tags:**
 
 ```
-snowdreamtech/base:nightly-alpine   # Variant-specific only
-snowdreamtech/base:nightly-rocky    # Variant-specific only
+snowdreamtech/dropbear:nightly-alpine   # Variant-specific only
+snowdreamtech/dropbear:nightly-rocky    # Variant-specific only
 ```
 
 ---
@@ -175,49 +175,49 @@ snowdreamtech/base:nightly-rocky    # Variant-specific only
 ### Pull the latest Debian image (default)
 
 ```bash
-docker pull snowdreamtech/base:latest
+docker pull snowdreamtech/dropbear:latest
 # or
-docker pull snowdreamtech/base:latest-debian
+docker pull snowdreamtech/dropbear:latest-debian
 ```
 
 ### Pull the latest Alpine image
 
 ```bash
-docker pull snowdreamtech/base:latest-alpine
+docker pull snowdreamtech/dropbear:latest-alpine
 ```
 
 ### Pull the latest Rocky image
 
 ```bash
-docker pull snowdreamtech/base:latest-rocky
+docker pull snowdreamtech/dropbear:latest-rocky
 ```
 
 ### Pull a specific version
 
 ```bash
 # Alpine 3.23.4
-docker pull snowdreamtech/base:3.23.4-alpine
+docker pull snowdreamtech/dropbear:3.23.4-alpine
 
 # Debian 13.4.0 (two ways)
-docker pull snowdreamtech/base:13.4.0-debian
-docker pull snowdreamtech/base:13.4.0
+docker pull snowdreamtech/dropbear:13.4.0-debian
+docker pull snowdreamtech/dropbear:13.4.0
 
 # Rocky 10.1.0
-docker pull snowdreamtech/base:10.1.0-rocky
+docker pull snowdreamtech/dropbear:10.1.0-rocky
 ```
 
 ### Pull nightly builds
 
 ```bash
 # Alpine nightly
-docker pull snowdreamtech/base:nightly-alpine
+docker pull snowdreamtech/dropbear:nightly-alpine
 
 # Debian nightly (two ways)
-docker pull snowdreamtech/base:nightly-debian
-docker pull snowdreamtech/base:nightly
+docker pull snowdreamtech/dropbear:nightly-debian
+docker pull snowdreamtech/dropbear:nightly
 
 # Rocky nightly
-docker pull snowdreamtech/base:nightly-rocky
+docker pull snowdreamtech/dropbear:nightly-rocky
 ```
 
 ---
@@ -255,7 +255,7 @@ matrix:
 
     - variant: debian
       version: "13.4.0"
-      is_latest: true    # ← Default variant
+      is_latest: true # ← Default variant
 
     - variant: rocky
       version: "10.1.0"
@@ -272,8 +272,8 @@ The key configuration that enables this tagging strategy:
 
 ```yaml
 images: |
-  name=snowdreamtech/base,enable=true
-  name=ghcr.io/snowdreamtech/base,enable=true
+  name=snowdreamtech/dropbear,enable=true
+  name=ghcr.io/snowdreamtech/dropbear,enable=true
 flavor: |
   latest=false
   prefix=

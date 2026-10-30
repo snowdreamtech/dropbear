@@ -1,14 +1,18 @@
-# Base Image (Alpine Variant)
+# Dropbear Image (Alpine Variant)
 # Extends snowdreamtech/alpine with additional tooling and configuration.
+
+FROM ghcr.io/snowdreamtech/alpine:3.24.1 AS builder
+
+ENV OPENSSH_VERSION=10.3_p1-r1
+
+RUN apk add --no-cache openssh=${OPENSSH_VERSION} \
+    && cp $(find /usr/lib /usr/libexec -name sftp-server 2>/dev/null | head -n 1) $(which sftp) /root/
 
 FROM ghcr.io/snowdreamtech/alpine:3.24.1
 
 # Build-time Configuration
-# x-release-please-start-version
-ARG VERSION="3.24.1"
-# x-release-please-end
-
 ARG BUILDTIME \
+    VERSION \
     REVISION \
     KEEPALIVE=0 \
     CAP_NET_BIND_SERVICE=0 \
@@ -19,21 +23,22 @@ ARG BUILDTIME \
     PGID=0 \
     PUID=0 \
     USER=root \
-    WORKDIR=/root
+    WORKDIR=/root \
+    DROPBEAR_VERSION=2026.91-r0
 
 # Standard OCI Metadata (https://github.com/opencontainers/image-spec)
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
-    org.opencontainers.image.title="Base Image Based On Alpine" \
-    org.opencontainers.image.description="Docker Images for Base on Alpine. (i386, amd64, arm32v6, arm32v7, arm64, ppc64le, riscv64, s390x)" \
-    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/base" \
-    org.opencontainers.image.base.name="snowdreamtech/base:alpine" \
+    org.opencontainers.image.title="Dropbear Image Based On Alpine" \
+    org.opencontainers.image.description="Docker Images for Dropbear on Alpine. (i386, amd64, arm32v6, arm32v7, arm64, ppc64le, riscv64, s390x)" \
+    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/dropbear" \
+    org.opencontainers.image.base.name="ghcr.io/snowdreamtech/alpine:3.24.1" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.source="https://github.com/snowdreamtech/base" \
+    org.opencontainers.image.source="https://github.com/snowdreamtech/dropbear" \
     org.opencontainers.image.vendor="Snowdream Tech" \
     org.opencontainers.image.version="${VERSION}" \
     org.opencontainers.image.created="${BUILDTIME}" \
     org.opencontainers.image.revision="${REVISION}" \
-    org.opencontainers.image.url="https://github.com/snowdreamtech/base"
+    org.opencontainers.image.url="https://github.com/snowdreamtech/dropbear"
 
 # Runtime Environment Configuration
 ENV KEEPALIVE=${KEEPALIVE} \
@@ -45,23 +50,42 @@ ENV KEEPALIVE=${KEEPALIVE} \
     PGID=${PGID} \
     PUID=${PUID} \
     USER=${USER} \
-    WORKDIR=${WORKDIR}
+    WORKDIR=${WORKDIR} \
+    DROPBEAR_VERSION=${DROPBEAR_VERSION}
 
-# Additional tooling and configuration for Base image
+# Additional tooling and configuration for Dropbear image
 RUN apk update \
     && apk add --no-cache \
-    vim
+    dropbear=${DROPBEAR_VERSION} \
+    dropbear-convert=${DROPBEAR_VERSION} \
+    dropbear-dbclient=${DROPBEAR_VERSION} \
+    dropbear-scp=${DROPBEAR_VERSION} \
+    dropbear-ssh=${DROPBEAR_VERSION} \
+    fastfetch \
+    xauth \
+    && mkdir -p /usr/libexec
+
+COPY --from=builder /root/sftp* /usr/libexec/
+
+RUN mkdir -p /usr/lib/ssh/ \
+    && ln -s /usr/libexec/sftp-server /usr/lib/ssh/sftp-server \
+    && printf '%s\n' '#!/bin/sh' '/usr/libexec/sftp -S /usr/bin/dbclient -s /usr/libexec/sftp-server "$@"' > /usr/local/bin/sftp \
+    && chmod +x /usr/local/bin/sftp
 
 # Container Orchestration Files
+COPY motd.sh /usr/local/bin/motd.sh
+
 COPY entrypoint.d /usr/local/bin/entrypoint.d
 
-RUN chmod +x /usr/local/bin/entrypoint.d/*
+RUN chmod +x /usr/local/bin/motd.sh \
+    && chmod +x /usr/local/bin/entrypoint.d/*
 
 # Standard Healthcheck (Verification of core system responsiveness)
 HEALTHCHECK NONE
 
 # Process Execution
+EXPOSE 22
 USER root
 WORKDIR /root
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["/bin/sh"]
+CMD ["/usr/sbin/dropbear", "-R", "-F", "-E", "-p", "22"]
